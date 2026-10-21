@@ -160,7 +160,10 @@ class ReservaCrudTests(unittest.IsolatedAsyncioTestCase):
 
         respuesta = await eliminar_reserva(creada.id)
 
-        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(
+            respuesta["mensaje"],
+            f"registro {creada.id} eliminado satisfactoriamente",
+        )
         self.assertEqual(await listar_reservas(), [])
 
     async def test_missing_reserva_returns_404(self):

@@ -3,7 +3,7 @@ from typing import Annotated, NoReturn
 
 from bson import ObjectId
 from bson.errors import InvalidId
-from fastapi import APIRouter, HTTPException, Path, Response, status
+from fastapi import APIRouter, HTTPException, Path, status
 from pymongo.errors import PyMongoError
 
 from database import get_reservas_collection
@@ -179,10 +179,10 @@ async def actualizar_reserva_parcial(
 
 @router.delete(
     "/{reserva_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    response_class=Response,
+    response_model=dict[str, str],
+    status_code=status.HTTP_200_OK,
 )
-async def eliminar_reserva(reserva_id: ReservaId) -> Response:
+async def eliminar_reserva(reserva_id: ReservaId) -> dict[str, str]:
     object_id = _parse_reserva_id(reserva_id)
 
     try:
@@ -196,4 +196,4 @@ async def eliminar_reserva(reserva_id: ReservaId) -> Response:
             detail="No se encontró la reserva.",
         )
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return {"mensaje": f"registro {reserva_id} eliminado satisfactoriamente"}
